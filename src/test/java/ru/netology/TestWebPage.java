@@ -36,8 +36,10 @@ public class TestWebPage {
         driver = null;
     }
 
+    //Позитивные проверки (Поле "Имя и фамилия" содержат дефис и пробелы)
+
     @Test
-    void testWebPage(){
+    void rightTest(){
         driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("Василий Петров-Иванов");
         driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+79119418601");
         driver.findElement(By.className("checkbox__box")).click();
@@ -47,5 +49,61 @@ public class TestWebPage {
         Assertions.assertEquals(expectedResult, actualResult);
     }
 
+    //Негативные проверки
 
+    //Имя и Фамилия содержат латинские символы
+    @Test
+    void invalidNameField(){
+        driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("someName");
+        driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+79119418601");
+        driver.findElement(By.className("checkbox__box")).click();
+        driver.findElement(By.tagName("button")).click();
+        String actualResult = driver.findElement(By.cssSelector(".input_invalid")).getText();
+        //String expectedResult = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
+        Assertions.assertNotNull(actualResult);
+    }
+
+    //Phone number have less then 10 numbers
+    @Test
+    void invalidPhoneField(){
+        driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("Василий Петров-Иванов");
+        driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+79119");
+        driver.findElement(By.className("checkbox__box")).click();
+        driver.findElement(By.tagName("button")).click();
+        String actualResult = driver.findElement(By.cssSelector(".input_invalid")).getText();
+        Assertions.assertNotNull(actualResult);
+    }
+
+    //Phone number have more 10 numbers
+    @Test
+    void phoneNumberMore(){
+        driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("as");
+        driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+123456789012");
+        //driver.findElement(By.className("checkbox__box")).click();
+        driver.findElement(By.tagName("button")).click();
+        String actualResult = driver.findElement(By.cssSelector(".input_invalid")).getText();
+        Assertions.assertNotNull(actualResult);
+    }
+
+    //Checkbox not checked
+    @Test
+    void uncheckedCheck(){
+        driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("Василий Петров-Иванов");
+        driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+79012345678");
+        //driver.findElement(By.className("checkbox__box")).click();
+        driver.findElement(By.tagName("button")).click();
+        String actualResult = driver.findElement(By.cssSelector(".input_invalid")).getText();
+        Assertions.assertNotNull(actualResult);
+    }
+
+    //invalid Name and Phone fields
+    @Test
+    void invalidNameAndPhone(){
+        driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("as");
+        driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+790");
+        //driver.findElement(By.className("checkbox__box")).click();
+        driver.findElement(By.tagName("button")).click();
+        String actualResult = driver.findElement(By.cssSelector(".input_invalid")).getText();
+        Assertions.assertNotNull(actualResult);
+    }
 }
