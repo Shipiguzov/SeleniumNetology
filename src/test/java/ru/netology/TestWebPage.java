@@ -12,7 +12,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 public class TestWebPage {
 
     private WebDriver driver;
-    private ChromeOptions options;
 
     @BeforeAll
     static void setupAll() {
@@ -46,12 +45,12 @@ public class TestWebPage {
         driver.findElement(By.tagName("button")).click();
         String actualResult = driver.findElement(By.cssSelector("[data-test-id=\"order-success\"]")).getText().strip();
         String expectedResult = "Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
-        Assertions.assertEquals(expectedResult, actualResult);
+        Assertions.assertEquals(expectedResult, actualResult, "Test done, all works fine");
     }
 
     //Негативные проверки
 
-    //Имя и Фамилия содержат латинские символы
+    //Name have english letters
     @Test
     void invalidNameField(){
         driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("someName");
@@ -79,7 +78,6 @@ public class TestWebPage {
     void phoneNumberMore(){
         driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("as");
         driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+123456789012");
-        //driver.findElement(By.className("checkbox__box")).click();
         driver.findElement(By.tagName("button")).click();
         String actualResult = driver.findElement(By.cssSelector(".input_invalid")).getText();
         Assertions.assertNotNull(actualResult);
@@ -101,7 +99,6 @@ public class TestWebPage {
     void invalidNameAndPhone(){
         driver.findElement(By.cssSelector("[type=\"text\"]")).sendKeys("as");
         driver.findElement(By.cssSelector("[type=\"tel\"]")).sendKeys("+790");
-        //driver.findElement(By.className("checkbox__box")).click();
         driver.findElement(By.tagName("button")).click();
         String actualResult = driver.findElement(By.cssSelector(".input_invalid")).getText();
         Assertions.assertNotNull(actualResult);
